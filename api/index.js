@@ -1,21 +1,20 @@
 export default async function handler(req, res) {
   try {
-    // Tạo target URL từ path yêu cầu
-    const target = `https://api.binance.com${req.url.replace("/api", "")}`;
-    console.log("Proxying:", target);
+    // Xóa /api trong đường dẫn để tạo link tới Binance
+    const path = req.url.startsWith('/api') ? req.url.slice(4) : req.url;
+    const target = `https://api.binance.com${path}`;
 
-    // Gửi request đến Binance
+    console.log("Proxying request to:", target);
+
     const response = await fetch(target, {
       headers: {
         "User-Agent": "Mozilla/5.0",
-        "Origin": "https://api.binance.com",
-      },
+        "Origin": "https://api.binance.com"
+      }
     });
 
-    // Lấy nội dung trả về
     const data = await response.text();
 
-    // Trả lại client
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.status(response.status).send(data);
   } catch (error) {
