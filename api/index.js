@@ -1,6 +1,5 @@
 export default async function handler(req, res) {
   try {
-    // Xóa /api trong đường dẫn để tạo link tới Binance
     const path = req.url.startsWith('/api') ? req.url.slice(4) : req.url;
     const target = `https://api.binance.com${path}`;
 
